@@ -1,0 +1,70 @@
+<?
+	$inputId = $this->formGetElementId($form_model_class.'_'.$form_field->dbName);
+	$field_name = $form_field->dbName;
+	
+	$date = h($form_model->displayField($form_field->dbName, 'date'));
+	$time = h($form_model->displayField($form_field->dbName, 'time'));
+	if(strlen($date) && strlen($time))
+		$datetime = $date.' '.$time;
+	else $datetime = '';
+
+	$columnDefinition = $form_field->getColDefinition();
+	$dateFormat = $columnDefinition->getDateFormat();
+	if($dateFormat != '%x')
+		$calendar_format = $dateFormat;
+	else $calendar_format = '';
+?>
+
+<input type="hidden" id="<?= $inputId ?>" value="<?= $datetime ?>" name="<?= $form_model_class ?>[<?= $form_field->dbName ?>]">
+
+<table>
+<tr>
+	<td>
+		<div class="datePickerHolder">
+			<input <? if ($form_field->disabled) echo 'disabled="disabled"' ?> type="text" class="datetime datetime-date" id="<?= $inputId ?>-date" onkeyup="dateTimeUpdate('<?= $inputId ?>')" onchange="dateTimeUpdate('<?= $inputId ?>')" value="<?= $date ?>" />
+		</div>
+	</td>
+	<td class="datetime-time">
+		<input <? if ($form_field->disabled) echo 'disabled="disabled"' ?> type="text" class="datetime datetime-time text" id="<?= $inputId ?>-time" onkeyup="dateTimeUpdate('<?= $inputId ?>')" value="<?= $time ?>" />
+	</td>
+</tr>
+</table>
+
+<script type='text/javascript'>
+	window.addEvent('domready', function() {
+		var init_datetime_calendar = function() {
+			if ($('<?= $inputId ?>-date').phpr_control_initialized === undefined)
+			{
+				<?= Backend_Html::calendar($inputId.'-date', $calendar_format); ?>
+				$('<?= $inputId ?>-date').phpr_control_initialized = true;
+			}
+		}
+		
+		var thisTab = $('<?= $inputId ?>-date').getTab();
+		if (thisTab)
+		{
+			thisTab.addEvent('onTabClick', function() {
+				init_datetime_calendar();
+			});
+		} else
+		{
+			init_datetime_calendar();
+		}
+	});
+	
+	function dateTimeUpdate(field_id)
+	{
+		var date_field = document.getElementById(field_id+'-date');
+		var time_field = document.getElementById(field_id+'-time');
+		var datetime_field = document.getElementById(field_id);
+		
+		if(date_field.value.length > 0 && time_field.value.length > 0)
+			datetime_field.value = date_field.value +' '+ time_field.value;
+		else if(date_field.value.length > 0)
+			datetime_field.value = date_field.value;
+		else if(time_field.value.length > 0)
+			datetime_field.value = time_field.value;
+		else
+			datetime_field.value = '';
+	}
+</script>

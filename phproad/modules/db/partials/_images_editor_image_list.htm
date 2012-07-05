@@ -1,0 +1,43 @@
+<? if ($images->count): 
+	$baseUrl = root_url('/uploaded/public/');
+?>
+	<ul class="imageList_sortable " id="grid-sortable-image-list">
+		<? foreach ($images as $index=>$image): ?>
+			<li>
+				<a href="#" class="row_drag_handle phpr_image_handle" onclick="return false" title="Reorder grouped products">Reorder options</a>
+				<a class="image_link" href="<?= $baseUrl.urlencode($image->disk_name) ?>" target="_blank"><img src="<?= $image->getThumbnailPath(50, 'auto') ?>" alt="<?= h($image->name) ?>"/></a>
+				
+				<div class="image_info">
+					<h4><?= h($image->name) ?></h4>
+					<p class="last">
+						Uploaded: <?= $image->displayField('created_at') ?> by <?= h($image->created_user_name) ?> |
+
+						<a href="#" onclick="return $(this).getForm().sendPhpr('<?= $this->getEventHandler('onFormWidgetEvent') ?>', {extraFields: {
+							'file_id': '<?= $image->id ?>',
+							'phpr_custom_event_name': 'on_editor_event',
+							'phpr_grid_editor_event': 'on_delete_image',
+							'phpr_event_field': '<?= $field_name ?>',
+							'phpr_image_record_id': '<?= $form_model->id ?>',
+							'phpr_grid_column': '<?= $grid_column ?>'
+						}, confirm: 'Do you really want to delete this image?', update: 'ui-grid-images-container', loadIndicator: {show: false}});" >Delete</a>
+					</p>
+					
+					<div id="<?= 'phpr_file_description_'.$image->id ?>">
+						<? $this->formRenderPartial('form_file_description', array('file'=>$image)) ?>
+					</div>
+				</div>
+
+				<input class="image_id" value="<?= $image->id ?>" type="hidden"/>
+				<input class="image_order" value="<?= $image->sort_order ?>" type="hidden"/>
+
+				<div class="clear"></div>
+			</li>
+		<? endforeach ?>
+	</ul>
+	
+	<script type="text/javascript">
+		$('grid-sortable-image-list').makeListSortable('<?= $this->getEventHandler("onSetFormFilesOrder") ?>', 'image_order', 'image_id', 'phpr_image_handle', {});
+	</script>
+<? else: ?>
+	<p class="noData">No images uploaded</p>
+<? endif ?>

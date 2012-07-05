@@ -1,0 +1,20 @@
+<div id="load_csv_form">
+	<h2>Grid help</h2>
+	<div class="content">
+		<div class="form400">
+			<p>
+				Add new row: ctrl+i<br/>
+				Delete current row: ctrl+d<br/>
+			</p>
+			
+			<p>Up and down arrow keys in autocomplete cells display the option list. In all other cells arrow keys move focus to another cell.</p>
+			
+			<? if ($grid_widget->sortable): ?>
+				<p>You can reorder rows by dragging them with the mouse.</p>
+			<? endif ?>
+			
+			<?= backend_button('Close', array('onclick'=>'return cancelPopup()')) ?>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>

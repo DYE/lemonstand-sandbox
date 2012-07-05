@@ -1,0 +1,88 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>System Configuration</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form action="<?php echo getRequestUri() ?>" method="post" id="step_form">
+			<h3>Database Configuration</h3>
+			
+			<p>Please prepare an empty MySQL database for LemonStand.</p>
+
+			<?php 
+				$error_field = '';
+				if (isset($error)): 
+					if ($error instanceof ValidationException)
+						$error_field = $error->field;
+			?>
+				<div class="error"><p><?php echo _h($error->getMessage()) ?></p></div>
+			<?php endif ?>
+
+			<ul class="form label150 field300">
+				<li class="<?php echo error_marker($error_field, 'mysql_host') ?>">
+					<label for="mysql_host">MySQL Host</label>
+					<input value="<?php echo _h(_post('mysql_host', 'localhost')) ?>" type="text" name="mysql_host" id="mysql_host" class="text"/>
+					<div class="clear"></div>
+				</li>
+				<li class="<?php echo error_marker($error_field, 'db_name') ?>">
+					<label for="db_name">Database Name</label>
+					<input autocomplete="off" value="<?php echo _h(_post('db_name')) ?>" type="text" name="db_name" id="db_name" class="text"/>
+					<p class="comment">Please specify the name of an empty MySQL database.</p>
+					<div class="clear"></div>
+				</li>
+				<li class="<?php echo error_marker($error_field, 'mysql_user') ?>">
+					<label for="mysql_user">MySQL User</label>
+					<input autocomplete="off" value="<?php echo _h(_post('mysql_user')) ?>" type="text" name="mysql_user" id="mysql_user" class="text"/>
+					<p class="comment">MySQL user must have all privileges in the specified database.</p>
+					<div class="clear"></div>
+				</li>
+				<li>
+					<label for="mysql_password">MySQL Password</label>
+					<input autocomplete="off" type="password" name="mysql_password" id="mysql_password" class="text"/>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<h3 class="form_header width460">Time Zone</h3>
+			<ul class="form label150 field300">
+				<li>
+					<label for="time_zone">Time Zone</label>
+					<?php $time_zones = timezone_identifiers_list(); ?>
+					<select name="time_zone" id="time_zone">
+						<?php foreach ($time_zones as $time_zone): 
+							$posted_zone = _post('time_zone');
+							if (!$posted_zone)
+								$checked = $time_zone == 'US/Central' || $time_zone == 'America/New_York';
+							else
+								$checked = $time_zone == $posted_zone;
+						?>
+							<option <?php echo $checked ? 'selected="selected"' : null  ?> value="<?php echo _h($time_zone) ?>"><?php echo _h($time_zone) ?></option>
+						<?php endforeach ?>
+					</select>
+					<p class="comment">Please specify a time zone. The time zone will be used for displaying dates in the administration area and on the website.</p>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<input type="submit" name="form_action" value="Next" id="next_btn"/>
+			<input type="hidden" name="step" value="system_configuration"/>
+			<input type="hidden" name="install_key" value="<?php echo _post('install_key') ?>"/>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		<?php if (!($error_field)): ?>
+			$('mysql_host').focus();
+		<?php else: ?>
+			$('<?php echo $error_field ?>').focus();
+		<?php endif ?>
+		
+		$('step_form').addEvent('submit', function(){
+			$('next_btn').disabled = true;
+		});
+	});
+</script>

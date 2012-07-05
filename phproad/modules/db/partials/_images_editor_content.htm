@@ -1,0 +1,100 @@
+<div class="form-450" id="ui-grid-images-form">
+	<div class="ui-popup-header">
+		<h2>Images</h2>
+		
+		<div class="toolbar" id="ui-grid-images-uploader">
+			<a id="ui-grid-images-uploader-link" class="last picture_add imageLink img_noBottomPading" href="#">Upload images</a>
+		</div>
+	</div>
+	
+	<?= Phpr_Form::openTag(array('id'=>null)) ?></form>
+	<?= Phpr_Form::openTag() ?>
+		<div class="grid-popup-images">
+			<div class="upload-overlay-container" id="ui-grid-images-overlay-container">
+				<div class="scrollable_image_list" id="ui-grid-images-container">
+					<? $this->renderPartial(PATH_APP.'/phproad/modules/db/partials/_images_editor_image_list.htm', array(
+						'images'=>$images,
+						'field_name'=>$field_name,
+						'form_model'=>$form_model,
+						'grid_column'=>$grid_column
+					)) ?>
+				</div>
+			</div>
+
+			<div class="uploaderContainer" id="ui-grid-uploader-container"></div>
+
+			<script type="text/javascript">
+				$('ui-grid-images-form').addEvent('popupLoaded', function() {
+					new FileUploader('ui-grid-images-uploader', {
+						'url': '<?= $this->formGetUploadUrl($db_field_name, $this->formGetEditSessionKey().'-'.$row_index) ?>', 
+						'container': $('ui-grid-uploader-container'), 
+						'target': 'ui-grid-images-uploader-link',
+						'data': $('ui-grid-uploader-container').getForm(),
+						'embedProgressTo': 'ui-grid-images-overlay-container',
+						'onUploadComplete': function(){
+							$('ui-grid-uploader-container').getForm().sendPhpr(
+								'<?= $this->getEventHandler('onFormWidgetEvent') ?>',
+								{
+									extraFields: {
+										'phpr_custom_event_name': 'on_editor_event',
+										'phpr_grid_editor_event': 'on_update_image_list',
+										'phpr_event_field': '<?= $field_name ?>',
+										'phpr_image_record_id': '<?= $form_model->id ?>',
+										'phpr_grid_column': '<?= $grid_column ?>'
+									},
+									update: 'ui-grid-images-container',
+									loadIndicator: {show: false},
+									onAfterUpdate: function(){
+										jQuery('#close-grid-images-form-btn').find('a').focus();
+										
+									}
+								}
+							)
+						}
+					});
+				});
+			</script>
+	
+			<input type="hidden" name="widget_model_class" value="<?= get_class($form_model) ?>"/>
+			<input name="edit_session_key" type="hidden" value="<?= $this->formGetEditSessionKey() ?>"/>
+
+			<input name="phpr_uploader_model_class" type="hidden" value="<?= get_class($form_model) ?>"/>
+			<input name="phpr_uploader_model_id" type="hidden" value="<?= $form_model->id ?>"/>
+			<input name="phpr_grid_column" type="hidden" value="<?= $grid_column ?>"/>
+			<input name="phpr_row_index" type="hidden" value="<?= $row_index ?>"/>
+		</div>
+	</form>
+	
+	<div class="ui-popup-footer">
+		<script type="text/javascript">
+			$('ui-grid-images-form').addEvent('onEscape', function() {
+				jQuery('#close-grid-images-form-btn').find('a').trigger('click');
+			});
+		</script>
+
+		<?= backend_button('Close', array('id'=>'close-grid-images-form-btn', 'href'=>'#', 'onclick'=>"
+			$('ui-grid-uploader-container').getForm().sendPhpr(
+				'".$this->getEventHandler('onFormWidgetEvent')."',
+				{
+					extraFields: {
+						'phpr_custom_event_name': 'on_editor_event',
+						'phpr_grid_editor_event': 'on_get_cell_text',
+						'phpr_event_field': '".$field_name."',
+						'phpr_image_record_id': '".$form_model->id."',
+						'phpr_grid_column': '".$grid_column."'
+					},
+					onSuccess: function(tree, elements, html) {
+						var editor = jQuery('#ui-grid-images-form');
+						editor.data('ui.gridEditor').setCellDisplayText(editor.data('ui.gridCell'), html);
+						editor.data('ui.gridEditor').setCellValue(editor.data('ui.gridCell'), html);
+						jQuery.ui.grid.hidePopup(); 
+					},
+					loadIndicator: {show: false}
+				}
+			);
+
+			return false;
+		")) ?>
+		<div class="clear"></div>
+	</div>
+</div>

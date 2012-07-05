@@ -1,0 +1,77 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>System Requirements</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form action="<?php echo getRequestUri() ?>" method="post">
+			<h3>Checking the system requirements</h3>
+			
+			<ul class="bool_list">
+			<?php
+				$requirements = check_requirements();
+				$requirements_met = true;
+
+				foreach ($requirements as $name=>$met):
+					if (!$met)
+						$requirements_met = false;
+			?>
+				<li class="<?php echo $met ? 'positive' : 'negative' ?>"><?php echo $name ?></li>
+			<?php endforeach ?>
+			</ul>
+			
+			<h4>Libraries, required for certain modules</h4>
+
+			<p>LemonStand can be installed even if some libraries from the list below are not available. In this case, however, some features will not work.</p>
+
+			<ul class="bool_list optional">
+			<?php
+				$optionals = check_optionals();
+
+				foreach ($optionals as $name=>$met):
+			?>
+				<li class="<?php echo $met ? 'positive' : 'negative' ?>"><?php echo $name ?></li>
+			<?php endforeach ?>
+			</ul>
+			
+			<?php
+				$warnings = check_warnings();
+				if ($warnings):
+			?>
+				<h4>Warnings</h4>
+				<p>LemonStand can be installed even if there are warnings in the list below.</p>
+
+				<ul class="bool_list optional">
+				<?php
+					foreach ($warnings as $name=>$description):
+				?>
+					<li class="negative"><strong><?php echo $name ?></strong><br/><?php echo $description ?></li>
+				<?php endforeach ?>
+				</ul>
+			<?php endif ?>
+
+			<?php if ($requirements_met): ?>
+				<h4>Requirements are met!</h4>
+				<p>Congratulations! Your system met the requirements. Please click the Start Installation button to continue.</p>
+				
+				<ul class="form label450">
+					<li class="checkbox">
+						<input <?php if (_post('delete_install_files')): ?>checked="checked"<?php endif ?> type="checkbox" name="delete_install_files" value="1" id="delete_install_files" class="text"/>
+						<label for="delete_install_files">Delete all installation-related files after the installation is complete.</label>
+						<div class="clear"></div>
+					</li>
+				</ul>
+
+				<input type="submit" name="form_action" value="Start Installation"/>
+			<?php else: ?>
+				<h4>Requirements not met</h4>
+				<p>We are sorry. Your system does not meet the minimum requirements for the installation.</p>
+			<?php endif ?>
+
+			<input type="hidden" name="step" value="requirements"/>
+			<input type="hidden" name="install_key" value="<?php echo _post('install_key') ?>"/>
+		</form>
+	</div>
+</div>

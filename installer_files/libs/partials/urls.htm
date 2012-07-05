@@ -1,0 +1,59 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>Administration URLs</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form action="<?php echo getRequestUri() ?>" method="post" id="step_form">
+			<p>There are two special URLs in LemonStand: the Administration Area URL and the Configuration Tool URL. The Administration Area is a back-end user interface which you will use for building the website and managing your online store. The Configuration Tool is a web interface for managing the system configuration - the database connection parameters and encryption.</p>
+			
+			<p>By default the URLs of the Administration Area and the Configuration Tool are <?php echo get_root_url().installer_root_url('<em>backdoor</em>') ?> and <?php echo get_root_url().installer_root_url('<em>config_tool</em>') ?>. It is recommended to change the default value to make the system more secure.</p>
+			
+			<p>URL keys can contain only Latin characters, digits and underscore characters. Should you change the URL keys after the installation, you can do it by correcting the config/config.php file.</p>
+			
+			<?php 
+				$error_field = '';
+				if (isset($error)): 
+					if ($error instanceof ValidationException)
+						$error_field = $error->field;
+			?>
+				<div class="error"><p><?php echo _h($error->getMessage()) ?></p></div>
+			<?php endif ?>
+
+			<ul class="form label200 field300">
+				<li class="<?php echo error_marker($error_field, 'backend_url') ?>">
+					<label for="backend_url">Administration Area URL key</label>
+					<input autocomplete="off" value="<?php echo _h(_post('backend_url', 'backdoor')) ?>" type="text" name="backend_url" id="backend_url" class="text"/>
+					<p class="comment">Please specify a URL key which you will use to access the Administration Area.</p>
+					<div class="clear"></div>
+				</li>
+				<li class="<?php echo error_marker($error_field, 'config_url') ?>">
+					<label for="config_url">Configuration Tool URL key</label>
+					<input autocomplete="off" value="<?php echo _h(_post('config_url', 'config_tool')) ?>" type="text" name="config_url" id="config_url" class="text"/>
+					<p class="comment">Please specify a URL key which you will use to access the Configuration Tool.</p>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<input type="submit" name="form_action" value="Next" id="next_btn"/>
+			<input type="hidden" name="step" value="urls"/>
+			<input type="hidden" name="install_key" value="<?php echo _post('install_key') ?>"/>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		<?php if (!($error_field)): ?>
+			$('backend_url').focus();
+		<?php else: ?>
+			$('<?php echo $error_field ?>').focus();
+		<?php endif ?>
+		
+		$('step_form').addEvent('submit', function(){
+			$('next_btn').disabled = true;
+		});
+	});
+</script>

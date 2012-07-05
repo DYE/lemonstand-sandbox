@@ -1,0 +1,26 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>Demo Website Theme</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form action="<?php echo getRequestUri() ?>" method="post">
+			<p>Do you want the installer to import the Demo Website theme to your installation? The demo theme contains all pages needed for a simple online store. It contains the <a target="_blank" href="http://demo.lemonstandapp.com/basic">LemonStand Demo Store</a> website pages and design. The theme does not contain any products.</p>
+			
+			<ul class="form label450">
+				<li class="checkbox">
+					<input <?php if (_post('delete_install_files')): ?>checked="checked"<?php endif ?> type="checkbox" name="import_default_theme" value="1" id="import_default_theme" class="text"/>
+					<label for="import_default_theme">Yes, please import the Demo Website theme.</label>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<input type="hidden" name="step" value="default_theme"/>
+			<input type="hidden" name="install_key" value="<?php echo _post('install_key') ?>"/>
+			
+			<input type="submit" name="form_action" value="Continue"/>
+		</form>
+	</div>
+</div>

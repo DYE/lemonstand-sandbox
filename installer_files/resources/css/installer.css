@@ -1,0 +1,433 @@
+/*
+ * Global reset
+ */
+
+html { font-size: 100%; /* IE hack */ }
+
+html, body, form, fieldset, h1, h2, h3, h4, h5, h6, p, pre, 
+blockquote, ul, ol, dl, dt, dd, li, address, dd, dtm, div, td, th, hr
+{
+	margin:0;
+	padding:0;
+}
+
+ul,li
+{
+	list-style-type: none;
+}
+
+body
+{
+	font: 62.5% "myriad pro",Helvetica,Calibri,Arial,sans-serif;
+	background-color: #f2f2f2;
+}
+
+/*
+ * Common classes
+ */
+
+a
+{
+	color: #44A4CB;
+	text-decoration: none;
+}
+
+.clear
+{
+	clear: both;
+}
+
+a.link_color
+{
+	color: #15446c!important;
+}
+
+p
+{
+	font: normal 1.4em/1.8em "myriad pro", Helvetica, Calibri, Arial, sans-serif;
+	color: #666666;
+	padding-bottom: 15px;
+}
+
+ul
+{
+	font-size: 1.3em;
+	color: #333;
+}
+
+ul li
+{
+	line-height: 150%;
+}
+
+.bottom_offset
+{
+	padding-bottom: 15px;
+}
+
+/*
+ * Layout
+ */
+
+#header
+{
+	height: 156px;
+	background: #FFFFFF url('../images/header_bg.png') repeat-x left top;
+}
+
+h1
+{
+	text-indent: -10000em;
+	background: transparent url('../images/header_logo.gif') no-repeat left bottom;
+	width: 350px;
+	height: 156px;
+}
+
+h2 {
+	font: bold 3.4em "myriad pro", Helvetica, Calibri, Arial, sans-serif;
+	color: #24668e;
+	padding: 5px 0 10px 0;
+}
+
+h3 {
+	font: bold 1.6em "myriad pro", Helvetica, Calibri, Arial, sans-serif;
+	color: #333;
+	padding-bottom: 15px;
+}
+
+h4 {
+	font: bold 1.4em "myriad pro", Helvetica, Calibri, Arial, sans-serif;
+	color: #303030;
+	padding: 5px 0;
+}
+
+h4.form_header
+{
+	border-bottom: 1px dotted #ccc;
+	padding-bottom: 3px;
+	margin-bottom: 6px;
+}
+
+em, strong.important
+{
+	color: #990000;
+	font-style: normal;
+	font-weight: bold;
+}
+
+#content
+{
+	background: white url(../images/content_bg.gif) repeat-x left top;
+	padding: 25px 0 15px 0;
+	min-height: 300px;
+}
+
+#footer
+{
+	border-top: 2px solid #e7e7e7;
+	padding: 15px 0;
+}
+
+#footer p
+{
+	color: #bbb;
+	float: left;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 0;
+}
+
+#footer p.right
+{
+	float: right;
+}
+
+.wrapper
+{
+	width: 902px;
+	margin: 0 auto;
+}
+
+#page_header
+{
+	background: transparent url('../images/topcontent_wrapper_bg.jpg') repeat-x left top;
+}
+
+#page_header .wrapper
+{
+	background: transparent url('../images/topcontent_bg.jpg') no-repeat left top;
+}
+
+#page_header h2
+{
+	color: #FFFFFF;
+	padding: 20px 0;
+	text-shadow:5px 5px 4px #0A3150;
+	font: bold 2.8em "myriad pro",Helvetica,"Calibri",Arial,sans-serif;
+}
+
+#header .wrapper
+{
+	background: transparent url('../images/topcontent_top.gif') no-repeat 427px bottom;
+}
+
+/*
+ * Forms
+ */
+
+input.button
+{
+	font: 1.1em "Lucida Grande",Arial,Tahoma,Verdana,Helvetica,sans-serif!important;
+	color: #000!important;
+}
+
+ul.form
+{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+ul.form li
+{
+	clear: both;
+	padding-bottom: 10px;
+}
+
+ul.form li.error label
+{
+	color: #990000;
+}
+
+ul.form li.error input.text
+{
+	border-color: #990000;
+}
+
+ul.form label,
+ul.form input,
+ul.form p.comment
+{
+	float: left;
+}
+
+ul.form p.comment
+{
+	clear: left;
+	font-size: 11px;
+	color: #666666;
+	padding-bottom: 2px;
+	padding-top: 3px;
+	line-height: 140%;
+}
+
+ul.form p.comment strong
+{
+	color: #333;
+}
+
+ul.form label span.comment
+{
+	display: block;
+	font-size: 11px;
+	color: #666666;
+	padding-bottom: 2px;
+	padding-top: 3px;
+}
+
+ul.form input.text
+{
+	border: 2px solid #bbbbbb;
+	font-size: 15px;
+	padding: 4px;
+	color: #333;
+}
+
+ul.form label
+{
+	font-size: 13px;
+	color: #333333;
+	margin-top: 3px;
+}
+
+ul.form li.checkbox label
+{
+	margin-top: 0;
+	margin-left: 5px;
+}
+
+ul.form li.checkbox input
+{
+	float: left;
+	margin-left: 0;
+	margin-top: 1px;
+	border: none;
+}
+
+div.error
+{
+	padding-bottom: 10px;
+}
+
+div.error p
+{
+	padding: 10px 12px 7px 12px!important;
+	background: #f3b63c;
+	color: #000;
+	font-size: 13px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+
+/*
+ * Back-end forms
+ */
+
+[disabled] 
+{
+	color: #333!important;
+}
+
+input[disabled] 
+{
+	background: #eee;
+}
+
+/*
+ * Size specifiers
+ */
+
+.label80 label
+{
+	width: 80px;
+}
+
+.label120 label
+{
+	width: 120px!important;
+}
+
+.label150 label
+{
+	width: 150px!important;
+}
+
+.label150 p.comment
+{
+	margin-left: 150px;
+}
+
+.label200 p.comment
+{
+	margin-left: 200px;
+}
+
+.label200 label
+{
+	width: 200px;
+}
+
+.label300 label
+{
+	width: 300px;
+}
+
+.label350 label
+{
+	width: 350px;
+}
+
+.label450 label
+{
+	width: 450px;
+}
+
+.field200 input,
+.field200 select,
+.field200 p.comment
+{
+	width: 200px;
+}
+
+.field300 input,
+.field300 select,
+.field300 p.comment
+{
+	width: 300px;
+}
+
+.field30 input
+{
+	width: 30px;
+}
+
+.width330
+{
+	width: 330px;
+}
+
+.width360
+{
+	width: 360px;
+}
+
+.width460
+{
+	width: 460px;
+}
+
+/*
+ * Boolean list
+ */
+
+ul.bool_list li
+{
+	padding-left: 25px;
+	padding-bottom: 8px;
+	font-size: 13px;
+}
+
+ul.bool_list li.positive
+{
+	background: url(../images/icon_tick.gif) no-repeat left top;
+}
+
+ul.bool_list li.negative
+{
+	background: url(../images/icon_error.gif) no-repeat left top;
+	color: #bd0000;
+}
+
+ul.optional li.negative
+{
+	color: #333333;
+}
+
+ul.bullets li
+{
+	color: #333333;
+	background: url(../images/bullet_small.gif) no-repeat 3px 5px;
+	padding-left: 14px;
+}
+
+/*
+ * License Agreement
+ */
+
+.eula_scroller
+{
+	overflow-y: auto;
+	height: 400px;
+	border: 2px solid #ccc;
+}
+
+.eula_scroller p
+{
+	padding-bottom: 0;
+	font-size: 1.3em;
+	color: #444;
+}
+
+.eula_scroller div
+{
+	padding: 5px;
+}

@@ -1,0 +1,42 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>License Agreement</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form action="<?php echo getRequestUri() ?>" method="post">
+			<h3>Welcome to the LemonStand installation!</h3>
+
+			<?php if (!strlen($error)): ?>
+				<p>Please read the following license agreement.</p>
+				<div class="bottom_offset">
+					<div class="eula_scroller">
+						<div><p><?php echo nl2br(_h($eula_text)) ?></p></div>
+					</div>
+				</div>
+			<?php endif ?>
+
+			<?php if (strlen($error)): ?>
+				<div class="error"><p><?php echo _h($error) ?></p></div>
+			<?php endif ?>
+			
+			<p>You can read about the LemonStand installation process in the LemonStand Wiki: <a href="http://lemonstandapp.com/docs/installing_lemonstand/" target="_blank">http://lemonstandapp.com/docs/installing_lemonstand/</a></p>
+
+			<?php if (!strlen($error)): ?>
+				<ul class="form label300">
+					<li class="checkbox">
+						<input type="checkbox" name="agree" value="1" id="agree" class="text"/>
+						<label for="agree">I agree with all the terms of the License Agreement</label>
+						<div class="clear"></div>
+					</li>
+				</ul>
+
+				<input type="submit" name="form_action" value="Next"/>
+				<input type="hidden" name="step" value="welcome"/>
+				<input type="hidden" name="install_key" value="<?php echo md5(gen_install_key()) ?>"/>
+			<?php endif ?>
+		</form>
+	</div>
+</div>

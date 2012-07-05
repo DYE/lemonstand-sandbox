@@ -1,0 +1,60 @@
+<? if (!$grid_widget->disable_toolbar): ?>
+	<div class="toolbar">
+		<? if ($grid_widget->toolbar_partial_path): ?>
+			<? $this->renderPartial($grid_widget->toolbar_partial_path) ?>
+		<? endif ?>
+		
+		<? if ($grid_widget->enable_csv_operations): ?>
+			<a class="imageLink table_save img_noBottomPading tooltip" title="Hold down the <strong>ALT</strong> key to export a semicolon separated file" href="javascript:;" onclick="return $(this).getForm().sendPhpr('<?= $this->getEventHandler('onFormWidgetEvent') ?>', {
+				loadIndicator: {show: false},
+				onBeforePost: LightLoadingIndicator.show.pass('Saving...'), 
+				onComplete: LightLoadingIndicator.hide,
+				onFailure: popupAjaxError,
+				extraFields: {
+					'column_name': '<?= $grid_widget->column_name ?>', 'iwork': (new Event(event).alt ? 0 : 1),
+					'phpr_custom_event_name': 'on_export_csv',
+					'phpr_event_field': '<?= $grid_widget->column_name ?>'
+				}
+			});">Save as CSV</a>
+			<a class="imageLink folder_table img_noBottomPading" href="javascript:;" onclick="new PopupForm('<?= $this->getEventHandler('onFormWidgetEvent') ?>', {ajaxFields: $merge($('<?= $container_id ?>').getForm().fieldsToHash(), {'phpr_custom_event_name': 'on_display_csv_import_popup', 'phpr_event_field': '<?= $grid_widget->column_name ?>'})}); return false;">Import CSV</a>
+		<? endif ?>
+		
+		<? if ($grid_widget->enable_search && $grid_widget->use_data_source): ?>
+			<div class="form right">
+				<div class="separator"></div>
+				<input type="text" class="search" id="<?= $container_id.'_search_field' ?>"/>
+			</div>
+		<? endif ?>
+
+		<a class="imageLink right help img_noBottomPading" href="javascript:;" onclick="new PopupForm('<?= $this->getEventHandler('onFormWidgetEvent') ?>', {ajaxFields: $merge($('<?= $container_id ?>').getForm().fieldsToHash(), {'phpr_custom_event_name': 'on_display_grid_help', 'phpr_event_field': '<?= $grid_widget->column_name ?>'})}); return false;">Help</a>
+		
+		<div class="clear"></div>
+	</div>
+<? endif ?>
+
+<div id="<?= $container_id ?>" class="ui-grid <?= $grid_widget->use_data_source ? 'no-scroll' : null ?>">
+	<? $grid_widget->render_partial('data_table') ?>
+</div>
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		var 
+			init_grid = function() {jQuery('#<?= $container_id ?>').grid(<?= $client_script_options ?>);},
+			this_tab = $('<?= $container_id ?>').getTab(),
+			popup = $('<?= $container_id ?>').selectParent('.popupForm');
+
+		if (this_tab)
+			this_tab.addEvent('onTabClick', function() {
+				init_grid();
+			});
+		else
+		{
+			if (popup)
+				popup.getElement('div').addEvent('popupLoaded', init_grid);
+			else
+				init_grid();
+		}
+		
+	});
+	
+</script>

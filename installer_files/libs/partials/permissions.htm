@@ -1,0 +1,53 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>Folder and File Permissions</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form action="<?php echo getRequestUri() ?>" method="post" id="step_form">
+			<p>Please specify permission masks for folders and files which LemonStand will create during the installation and software update sessions. The default permission value (777) is the most universal, but at the same time it provides less protection for your files. You may need to consult with your system administrator or hosting support team in order to find suitable permission masks for a web application. You can change the permission masks after the installation in the config/config.php file.</p>
+
+			<?php 
+				$error_field = '';
+				if (isset($error)): 
+					if ($error instanceof ValidationException)
+						$error_field = $error->field;
+			?>
+				<div class="error"><p><?php echo _h($error->getMessage()) ?></p></div>
+			<?php endif ?>
+
+			<ul class="form label150 field200">
+				<li class="<?php echo error_marker($error_field, 'folder_mask') ?>">
+					<label for="folder_mask">Folder Permission Mask</label>
+					<input autocomplete="off" value="<?php echo _h(_post('folder_mask', '777')) ?>" type="text" name="folder_mask" id="folder_mask" class="text"/>
+					<div class="clear"></div>
+				</li>
+				<li class="<?php echo error_marker($error_field, 'file_mask') ?>">
+					<label for="file_mask">File Permission Mask</label>
+					<input autocomplete="off" value="<?php echo _h(_post('file_mask', '777')) ?>" type="text" name="file_mask" id="file_mask" class="text"/>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<input type="submit" name="form_action" value="Next" id="next_btn"/>
+			<input type="hidden" name="step" value="permissions"/>
+			<input type="hidden" name="install_key" value="<?php echo _post('install_key') ?>"/>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		<?php if (!($error_field)): ?>
+			$('folder_mask').focus();
+		<?php else: ?>
+			$('<?php echo $error_field ?>').focus();
+		<?php endif ?>
+		
+		$('step_form').addEvent('submit', function(){
+			$('next_btn').disabled = true;
+		});
+	});
+</script>

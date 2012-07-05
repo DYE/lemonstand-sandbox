@@ -1,0 +1,34 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>Installation Complete!</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<h3>Congratulations!</h3>
+		<p>LemonStand installation has been successfully completed.</p>
+
+		<h4>Website address</h4>
+
+		<p>Your website is located here: <a target="_blank" href="<?php echo Phpr::$request->getRootUrl().installer_root_url('/') ?>"><?php echo Phpr::$request->getRootUrl().installer_root_url('/') ?></a></p>
+
+		<h4>Administration Area</h4>
+
+		<p>Use the following link to log into the LemonStand administration area: <a target="_blank" href="<?php echo Phpr::$request->getRootUrl().installer_root_url(Phpr::$config->get('BACKEND_URL')) ?>"><?php echo Phpr::$request->getRootUrl().installer_root_url(Phpr::$config->get('BACKEND_URL')) ?></a></p>
+
+		<h4>Configuration Tool</h4>
+
+		<p>Use Configuration Tool if you need to change the database connection parameters. Configuration Tool address: <a target="_blank" href="<?php echo Phpr::$request->getRootUrl().installer_root_url(Phpr::$config->get('CONFIG_URL')) ?>"><?php echo Phpr::$request->getRootUrl().installer_root_url(Phpr::$config->get('CONFIG_URL')); ?></a></p>
+		
+		<h4>Security Considerations</h4>
+		
+		<p>We recommend that you move the config.dat file, located in the /config directory, to another directory that is unreachable from the Internet. After moving the file, please specify its absolute path in the <strong>SECURE_CONFIG_PATH</strong> parameter in the /config/config.php file.</p>
+		
+		<?php if (!$files_deleted): ?>
+			<p><em>Important!</em> The installation files were not deleted. Please delete the <strong>install.php</strong> script and the <strong>installer_files</strong> directory manually.</p>
+		<?php endif ?>
+
+		<p>Thank you for choosing Limewheel Creative software!</p>
+	</div>
+</div>

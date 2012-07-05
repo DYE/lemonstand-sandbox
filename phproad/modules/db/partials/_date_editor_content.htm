@@ -1,0 +1,53 @@
+<div class="grid-datepicker-form" id="ui-grid-date-form">
+	<div class="ui-popup-content">
+		<?= Phpr_Form::openTag(array('id'=>null)) ?></form>
+		<?= Phpr_Form::openTag() ?>
+			<div id="ui-grid-date-picker-container">
+				<input type="hidden" id="ui-grid-date-input"/>
+			</div>
+		</form>
+	</div>
+	
+	<div class="ui-popup-footer">
+		<script type="text/javascript">
+			$('ui-grid-date-form').addEvent('popupLoaded', function() {
+				jQuery('#ui-grid-date-picker-container').DatePicker({
+					flat: true,
+					date: '<?= $selected_date ?>',
+					current: '<?= $selected_date ?>',
+					calendars: 1,
+					'format': '<?= $date_format ?>', 
+					'locale': {
+						'days': [<?= $days ?>],
+						'daysShort': [<?= $days_short ?>],
+						'daysMin': [<?= $days_short ?>],
+						'months': [<?= $months ?>],
+						'monthsShort': [<?= $month_short ?>],
+						'weekMin': '<?= $week ?>'
+					},
+					onChange: function(formated, dates){
+						var 
+							editor = jQuery('#ui-grid-date-form').data('ui.gridEditor'),
+							cell = jQuery('#ui-grid-date-form').data('ui.gridCell');
+
+						editor.setCellValue(cell, formated);
+						editor.setCellDisplayText(cell, formated);
+						jQuery.ui.grid.hidePopup(); 
+						cell.trigger('navigateTo');
+					}
+				});
+			});
+		
+			$('ui-grid-date-form').addEvent('onEscape', function() {
+				editor = jQuery('#ui-grid-date-form').data('ui.gridEditor'),
+				cell = jQuery('#ui-grid-date-form').data('ui.gridCell'),
+				jQuery.ui.grid.hidePopup(); 
+				cell.trigger('navigateTo');
+			});
+		</script>
+		
+		<?= backend_button('Cancel', array('href'=>'#', 'onclick'=>"jQuery('#ui-grid-date-form').data('ui.gridCell').trigger('navigateTo'); jQuery.ui.grid.hidePopup(); return false;")) ?>
+		
+		<div class="clear"></div>
+	</div>
+</div>

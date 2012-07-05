@@ -1,0 +1,82 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>System Administrator Account</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form  action="<?php echo getRequestUri() ?>" method="post" id="step_form">
+			<p>Create a system administrator account. Please remember the user name and password you enter here. You will need this information to log into the LemonStand administration area after the installation. You can change the administrator account parameters later, on the LemonStand user management page.</p>
+
+			<?php 
+				$error_field = '';
+				if (isset($error)): 
+					if ($error instanceof ValidationException)
+						$error_field = $error->field;
+			?>
+				<div class="error"><p><?php echo _h($error->getMessage()) ?></p></div>
+			<?php endif ?>
+
+			<h4>Personal Information</h4>
+
+			<ul class="form label150 field200">
+				<li class="<?php echo error_marker($error_field, 'firstname') ?>">
+					<label for="firstname">First Name</label>
+					<input autocomplete="off" value="<?php echo _h(_post('firstname')) ?>" type="text" name="firstname" id="firstname" class="text"/>
+					<div class="clear"></div>
+				</li>
+				
+				<li class="<?php echo error_marker($error_field, 'lastname') ?>">
+					<label for="lastname">Last Name</label>
+					<input autocomplete="off" value="<?php echo _h(_post('lastname')) ?>" type="text" name="lastname" id="lastname" class="text"/>
+					<div class="clear"></div>
+				</li>
+				
+				<li class="<?php echo error_marker($error_field, 'email') ?>">
+					<label for="email">Email</label>
+					<input autocomplete="off" value="<?php echo _h(_post('email')) ?>" type="text" name="email" id="email" class="text"/>
+					<div class="clear"></div>
+				</li>
+			</ul>
+			
+			<h4>Account</h4>
+			
+			<ul class="form label150 field200">
+				<li class="<?php echo error_marker($error_field, 'username') ?>">
+					<label for="username">User Name</label>
+					<input autocomplete="off" value="<?php echo _h(_post('username')) ?>" type="text" name="username" id="username" class="text"/>
+					<div class="clear"></div>
+				</li>
+				<li class="<?php echo error_marker($error_field, 'password') ?>">
+					<label for="password">Password</label>
+					<input autocomplete="off" value="" type="password" name="password" id="password" class="text"/>
+					<div class="clear"></div>
+				</li>
+				<li class="<?php echo error_marker($error_field, 'password_confirm') ?>">
+					<label for="password_confirm">Password Confirmation</label>
+					<input autocomplete="off" value="" type="password" name="password_confirm" id="password_confirm" class="text"/>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<input type="submit" name="form_action" value="Next" id="next_btn"/>
+			<input type="hidden" name="step" value="admin_user"/>
+			<input type="hidden" name="install_key" value="<?php echo _post('install_key') ?>"/>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		<?php if (!($error_field)): ?>
+			$('firstname').focus();
+		<?php else: ?>
+			$('<?php echo $error_field ?>').focus();
+		<?php endif ?>
+		
+		$('step_form').addEvent('submit', function(){
+			$('next_btn').disabled = true;
+		});
+	});
+</script>

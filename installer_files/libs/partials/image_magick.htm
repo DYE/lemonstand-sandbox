@@ -1,0 +1,55 @@
+<div id="page_header">
+	<div class="wrapper">
+		<h2>ImageMagick configuration</h2>
+	</div>
+</div>
+
+<div id="content">
+	<div class="wrapper">
+		<form action="<?php echo getRequestUri() ?>" method="post" id="step_form">
+			<p>ImageMagick is an image processing library which dramatically increases quality of thumbnails and product images in LemonStand. If ImageMagick is available on this server, please configure it using the following form. If ImageMagick is not available, the default PHP image processing functions will be used.</p>
+			
+			<?php 
+				$error_field = '';
+				if (isset($error)): 
+					if ($error instanceof ValidationException)
+						$error_field = $error->field;
+			?>
+				<div class="error"><p><?php echo _h($error->getMessage()) ?></p></div>
+			<?php endif ?>
+
+			<ul class="form label450">
+				<li class="checkbox">
+					<input <?php if (_post('enable_im')): ?>checked="checked"<?php endif ?> type="checkbox" name="enable_im" value="1" id="enable_im" class="text" onclick="$('convert_path').disabled = !this.checked"/>
+					<label for="enable_im">ImageMagick is available and I would like LemonStand to use it</label>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<ul class="form label150 field300">
+				<li class="<?php echo error_marker($error_field, 'convert_path') ?>">
+					<label for="convert_path">Path to the <strong>convert</strong> script</label>
+					<input <?php if (!_post('enable_im')): ?>disabled="disabled"<?php endif ?> value="<?php echo _h(_post('convert_path')) ?>" type="text" name="convert_path" id="convert_path" class="text"/>
+					<p class="comment">Please specify a path to the <strong>convert</strong> script which is a part of the ImageMagick library. If the <strong>convert</strong> script is accessible from anywhere, leave this field empty. Example: <strong>/usr/bin/</strong></p>
+					<div class="clear"></div>
+				</li>
+			</ul>
+
+			<input type="submit" name="form_action" value="Next" id="next_btn"/>
+			<input type="hidden" name="step" value="image_magick"/>
+			<input type="hidden" name="install_key" value="<?php echo _post('install_key') ?>"/>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		<?php if ($error_field): ?>
+			$('<?php echo $error_field ?>').focus();
+		<?php endif ?>
+		
+		$('step_form').addEvent('submit', function(){
+			$('next_btn').disabled = true;
+		});
+	});
+</script>

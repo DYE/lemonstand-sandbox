@@ -7,6 +7,7 @@ set :group, "www-data"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
+set :retain_installer, true
 
 set :scm, "git"
 set :repository_name, "lemonstand-sandbox"
@@ -20,10 +21,18 @@ after "deploy", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
 
+  def remove_installer?
+    !retain_installer
+  end
+
   ## SETUP TASKS ##
   desc "Create the database"
   task :create_database, :roles => :db do
-    #  pending
+    run "mysql -u root -p"
+    run "create database #{application};"
+    run "grant all on sandbox.* to root@localhost identified by 'root';"
+    run "exit"
+    logger.info "~> Database successfully created"
   end
   before "deploy:setup", "deploy:create_database"
 
@@ -36,7 +45,7 @@ namespace :deploy do
 
   desc "Create the backups directory and provide write access to the user"
   task :setup_backup_dir, :roles => :app do
-    run "mkdir -p #{deploy_to}/backups && chmod u+w #{deploy_to}/backups"
+    run "mkdir -p #{deploy_to}/backups && chmod 775 #{deploy_to}/backups"
   end
   after "deploy:setup", "deploy:setup_backup_dir"
 
@@ -86,7 +95,7 @@ namespace :deploy do
     run "#{sudo} rm -rf #{current_path}/installer_files"
     run "#{sudo} rm -f  #{current_path}/install.php"
   end
-  after "deploy", "deploy:destroy_installer"
+  after "deploy", "deploy:destroy_installer" if remove_installer?
 
   desc "Remove local config.dat"
   task :destroy_config, :roles => :app do 
@@ -98,6 +107,7 @@ namespace :deploy do
   task :set_ownership, :roles => :app do 
     run "#{sudo} chown -R #{user}:#{group} #{deploy_to}"
   end
+  before "deploy:setup", "deploy:set_ownership"
   after "deploy", "deploy:set_ownership"
   after "deploy:setup", "deploy:set_ownership"
 
